@@ -1,0 +1,25 @@
+{
+  "name": "react-custom-controls",
+  "version": "0.8.0",
+  "description": "Collection of react based custom controls",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "custom",
+    "controls"
+  ],
+  "author": "Jacob Zuo",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chopinsky/react-custom-controls.git"
+  },
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.10"
+  }
+}
