@@ -1,27 +1,33 @@
 .list {
   display: block;
-  position: absolute;
-  left: 40px;
-  right: 40px;
-  top: 50px;
-  bottom: 100px;
-  text-align: left;
-  border: 2px solid #696969;
   box-sizing: content-box;
   border-collapse: collapse;
   min-height: 100px;
-  min-width: 100px;
+  min-width: 75px;
+}
+
+.control-style {
+  width: 300px;
+  height: 485px;
+  text-align: left;
+  background-color: #3B3738;
+  color: #FFFFF0;
+  border: 2px solid #696969;
 }
 
 .list-grouper {
-  padding-left: 0;
+  padding: 0;
+  margin: auto;
+  overflow: auto;
   list-style-type: none;
+  height: 100%;
 }
 
 .list-item {
   border: 0;
   height: 40px;
   padding-top: 20px;
+  padding-left: 10px;
 }
 
 .list-focus {

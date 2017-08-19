@@ -10,19 +10,29 @@ export default class SelectionList extends Component {
     };
   }
 
-  clickHandler(id) {
+  _clickHandler(id) {
     this.setState({ focusedItem: id });
     if (!!this.props.onItemClicked && typeof this.props.onItemClicked === 'function') {
       this.props.onItemClicked(id);
     }
   }
 
-  isActive(key) {
+  _isActive(key) {
     if (key === this.state.focusedItem) {
       return this.props.selectionClassName + " list-item";
     }
 
     return "list-default list-item";
+  }
+
+  _controlClassName() {
+    return 'list ' + this.props.controlClassName;
+  }
+
+  componentDidMount() {
+    if (this.props.selectFirst && this.props.data.length > 0) {
+      this._clickHandler(this.props.data[0].id);
+    }
   }
 
   render() {
@@ -33,19 +43,17 @@ export default class SelectionList extends Component {
 
       return (
         <li key={index} id={item.id} ref={'item-' + index}
-            className={this.isActive(item.id)}
-            onClick={this.clickHandler.bind(this, item.id)}>
+            className={this._isActive(item.id)}
+            onClick={this._clickHandler.bind(this, item.id)}>
           {item.name.toString()}
         </li>);
     });
 
     return (
-      <div>
-        <div className="selection-list">
-          <ul className="list-grouper">
-            {listItems}
-          </ul>
-        </div>
+      <div className={this._controlClassName()}>
+        <ul className='list-grouper'>
+          {listItems}
+        </ul>
       </div>
     );
   }
@@ -53,5 +61,7 @@ export default class SelectionList extends Component {
 
 SelectionList.defaultProps = {
   data: [],
-  selectionClassName: 'list-focus'
+  selectionClassName: 'list-focus',
+  controlClassName: 'control-style',
+  selectFirst: true
 }
