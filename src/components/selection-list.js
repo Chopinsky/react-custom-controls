@@ -10,6 +10,12 @@ export default class SelectionList extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.selectFirst && this.props.data.length > 0) {
+      this._clickHandler(this.props.data[0].id);
+    }
+  }
+
   _clickHandler(id) {
     this.setState({ focusedItem: id });
     if (!!this.props.onItemClicked && typeof this.props.onItemClicked === 'function') {
@@ -19,19 +25,30 @@ export default class SelectionList extends Component {
 
   _isActive(key) {
     if (key === this.state.focusedItem) {
-      return this.props.selectionClassName + " list-item";
+      return this.props.selectionClassName + ' ' + this.props.itemClassName;
     }
 
-    return "list-default list-item";
+    return 'list-default ' + this.props.itemClassName;
   }
 
   _controlClassName() {
     return 'list ' + this.props.controlClassName;
   }
 
-  componentDidMount() {
-    if (this.props.selectFirst && this.props.data.length > 0) {
-      this._clickHandler(this.props.data[0].id);
+  _renderItem(text, icon) {
+    if (!icon) {
+      return <div>{text}</div>;
+    } else {
+      return (
+        <div>
+          <div className="item-icon-warpper">
+            <img src={icon} alt={text} className={this.props.itemIconClassName} />
+          </div>
+          <div className="item-text-warpper">
+            {text}
+          </div>
+        </div>
+      );
     }
   }
 
@@ -45,7 +62,7 @@ export default class SelectionList extends Component {
         <li key={index} id={item.id} ref={'item-' + index}
             className={this._isActive(item.id)}
             onClick={this._clickHandler.bind(this, item.id)}>
-          {item.name.toString()}
+          {this._renderItem(item.name.toString(), item.icon)}
         </li>);
     });
 
@@ -63,5 +80,7 @@ SelectionList.defaultProps = {
   data: [],
   selectionClassName: 'list-focus',
   controlClassName: 'control-style',
+  itemClassName: 'list-item',
+  itemIconClassName: 'item-icon',
   selectFirst: true
 }

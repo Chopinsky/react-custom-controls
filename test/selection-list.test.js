@@ -27,7 +27,7 @@ describe("Selection List", () => {
   });
 
   // All tests will go here
-  it("always renders a div", () => {
+  it("always renders a div with correct structure", () => {
     const divs = lockScreen().find("div");
     const wrappingDiv = divs.first();
 

@@ -7,34 +7,54 @@
 }
 
 .control-style {
-  width: 300px;
-  height: 485px;
+  width: 225px;
+  height: 300px;
   text-align: left;
   background-color: #3B3738;
-  color: #FFFFF0;
+  color: #FFF8DC;
   border: 2px solid #696969;
 }
 
 .list-grouper {
   padding: 0;
   margin: auto;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   list-style-type: none;
   height: 100%;
 }
 
 .list-item {
   border: 0;
-  height: 40px;
-  padding-top: 20px;
-  padding-left: 10px;
+  height: 28px;
+  padding: 14px 0px 7px 10px;
+}
+
+.list-item:hover {
+  color: #F8F8FF;
+  cursor: pointer;
 }
 
 .list-focus {
-  color: white;
   background-color: #585858;
 }
 
 .list-default {
   background-color: rgba(0, 0, 0, 0);
+}
+
+.item-icon {
+  padding: 2px 0;
+  height: 16px;
+  width: 16px;
+}
+
+.item-icon-warpper {
+  display: inline-block;
+  float: left;
+}
+
+.item-text-warpper {
+  display: inline-block;
+  padding-left: 10px;
 }
