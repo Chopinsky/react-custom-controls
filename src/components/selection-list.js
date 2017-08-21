@@ -6,7 +6,7 @@ export default class SelectionList extends Component {
     super(props);
 
     this.state = {
-      focusedItem: ""
+      'focusedItem': null
     };
   }
 
@@ -17,7 +17,7 @@ export default class SelectionList extends Component {
   }
 
   _clickHandler(id) {
-    this.setState({ focusedItem: id });
+    this.setState({ 'focusedItem': id });
     if (!!this.props.onItemClicked && typeof this.props.onItemClicked === 'function') {
       this.props.onItemClicked(id);
     }
@@ -29,10 +29,6 @@ export default class SelectionList extends Component {
     }
 
     return 'list-default ' + this.props.itemClassName;
-  }
-
-  _controlClassName() {
-    return 'list ' + this.props.controlClassName;
   }
 
   _renderItem(text, icon) {
@@ -67,7 +63,7 @@ export default class SelectionList extends Component {
     });
 
     return (
-      <div className={this._controlClassName()}>
+      <div className={'list ' + this.props.controlClassName}>
         <ul className='list-grouper'>
           {listItems}
         </ul>
