@@ -1,0 +1,23 @@
+.slider-background {
+  background-size: 'cover';
+  background-position: 'center';
+}
+
+.slider-arrow {
+  position: relative;
+  display: inline-block;
+  top: 50%;
+  cursor: pointer;
+  transition: all ease-in .2s;
+  color: #fff;
+}
+
+.slider-arrow:hover {
+  opacity: 0.5;
+  transform: scale(1.4);
+  transition: all ease-in .2s;
+}
+
+.slider-arrow-icon {
+  margin: auto;
+}

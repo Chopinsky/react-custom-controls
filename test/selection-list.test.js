@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
 import { SelectionList } from '../src/index';
 
 describe("Selection List", () => {
@@ -17,6 +18,7 @@ describe("Selection List", () => {
   }
 
   beforeEach(() => {
+    jasmineEnzyme();
     props = {
       data: [{ id: "1", name: "test item 1" }],
       selectionClassName: undefined,

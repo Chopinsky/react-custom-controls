@@ -2,7 +2,9 @@
 *.log
 .git
 .babelrc
-test
-test-view
+.storybook
 examples
 coverage
+stories
+test
+test-view
