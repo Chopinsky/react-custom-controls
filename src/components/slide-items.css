@@ -1,0 +1,141 @@
+.div-bg {
+  width: 100%;
+  height: 100%;
+  margin-top: -50px;
+  display: inline-block;
+  position: relative;
+}
+
+.div-slide {
+  position: relative;
+  display: inline-block;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.translate-left-enter {
+  transform: translateX(100%);
+}
+
+.translate-left-enter.translate-left-enter-active {
+  transform: translateX(0);
+  transition: all 350ms ease-in-out;
+}
+
+.translate-right-enter {
+  transform: translateX(-100%);
+}
+
+.translate-right-enter.translate-right-enter-active {
+  transform: translateX(0);
+  transition: all 350ms ease-in-out;
+}
+
+.translate-left-exit {
+  transform: translateX(0);
+  position: absolute;
+  left: 0;
+}
+
+.translate-left-exit.translate-left-exit-active {
+  transform: translateX(-100%);
+  transition: all 350ms ease-in-out;
+  position: absolute;
+}
+
+.translate-right-exit {
+  transform: translateX(0);
+  position: absolute;
+  right: 0;
+}
+
+.translate-right-exit.translate-right-exit-active {
+  transform: translateX(100%);
+  transition: all 350ms ease-in-out;
+  position: absolute;
+}
+
+.scale-appear, .blur-appear, .rotate-appear, .translate-appear {
+  filter: grayscale(100%);
+  transition: all 700ms ease-in-out;
+}
+
+.scale-appear.scale-appear-active, .blur-appear.blur-appear-active, .rotate-appear.rotate-appear-active, .translate-appear.translate-appear-active {
+  filter: grayscale(0);
+}
+
+.scale-enter {
+  transform: scale(0.75);
+}
+
+.scale-enter.scale-enter-active {
+  transform: scale(1);
+  transition: all 350ms ease-in-out;
+}
+
+.scale-exit {
+  transform: scale(0.75);
+  opacity: 1;
+  position: absolute;
+  left: 0;
+}
+
+.scale-exit.scale-exit-active {
+  transform: scale(1);
+  opacity: .01;
+  transition: all 350ms ease-in-out;
+  position: absolute;
+}
+
+.blur-enter {
+  transform: scale(1);
+  filter: blur(2px);
+  opacity: .25;
+}
+
+.blur-enter.blur-enter-active {
+  transform: scale(1);
+  opacity: 1;
+  transition: all 350ms ease-in-out;
+}
+
+.blur-exit {
+  transform: scale(1);
+  opacity: 1;
+  position: absolute;
+  left: 0;
+}
+
+.blur-exit.blur-exit-active {
+  filter: blur(20px);
+  opacity: .01;
+  transition: all 350ms ease-in-out;
+  position: absolute;
+}
+
+.rotate-enter {
+  filter: hue-rotate(-180deg);
+  opacity: .45;
+}
+
+.rotate-enter.rotate-enter-active {
+  filter: hue-rotate(0deg);
+  opacity: 1;
+  transition: all 350ms ease-in-out;
+}
+
+.rotate-exit {
+  filter: hue-rotate(0deg);
+  opacity: 1;
+  position: absolute;
+  left: 0;
+}
+
+.rotate-exit.rotate-exit-active {
+  filter: hue-rotate(180deg);
+  opacity: .01;
+  transition: all 350ms ease-in-out;
+  position: absolute;
+}
