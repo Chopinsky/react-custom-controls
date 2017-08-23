@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { default as SlideItems } from './slide-items';
 import './image-slider.css';
 
 const TransitionStyle = {
@@ -9,20 +9,34 @@ const TransitionStyle = {
   'rotate': 'rotate'
 }
 
+const Arrow = (props) => {
+  const float = props.isLeft ? 'left' : 'right';
+  const arrow = props.isLeft ? '<' : '>';
+
+  return (
+    <div
+      style={{'float': float}}
+      className={props.arrowClassName}
+      onClick={props.onClick}>
+      <i className='slider-arrow-icon' aria-hidden="true">{arrow}</i>
+    </div>
+  );
+};
+
 export default class ImageSlider extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      'current': 0,
+      'activeIndex': 0,
+      'prevIndex': '',
       'direction': 1
     };
 
     this._nextSlide = this._nextSlide.bind(this);
     this._prevSlide = this._prevSlide.bind(this);
 
-    this.LeftArrow = this._renderArrow(true, this.props.arrowClassName);
-    this.RightArrow = this._renderArrow(false, this.props.arrowClassName);
+    this.Arrows = this._renderArrows();
   }
 
   render() {
@@ -30,40 +44,21 @@ export default class ImageSlider extends Component {
       return null;
     }
 
-    const slide = this.props.data[this.state.current];
-    if (!slide || !slide.bgImagePath) {
-      return null;
-    }
-
-    const style = {
-      backgroundImage: 'url(' + slide.bgImagePath + ')'
-    }
-
     return (
       <div
         className={this.props.controlClassName + ' slider-control'}
         style={this.props.style}
-        >
-        {this.LeftArrow}
-        {this.RightArrow}
-        <ReactCSSTransitionGroup
-          className='slider-bg'
-          transitionName={this._getTransitionClass(this.props.transitionStyle)}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-        >
-          <div style={style} className='div-slide' key={this.state.current}></div>
-        </ReactCSSTransitionGroup>
+      >
+        {this.Arrows}
+        <SlideItems
+          data={this.props.data}
+          transitionStyle={this.props.transitionStyle}
+          activeIndex={this.state.activeIndex}
+          prevIndex={this.state.prevIndex}
+          direction={this.state.direction}
+        />
       </div>
     );
-  }
-
-  _getTransitionClass(style) {
-    if (style === TransitionStyle.translate) {
-      return this.state.direction === 1 ? 'translate-left' : 'translate-right';
-    } else {
-      return this.props.transitionStyle;
-    }
   }
 
   _nextSlide() {
@@ -71,9 +66,12 @@ export default class ImageSlider extends Component {
       return;
     }
 
-    const slideCount =
-      (this.state.current === (this.props.data.length-1)) ? 0 : (this.state.current + 1);
-    this.setState({ 'current': slideCount, 'direction': 1 });
+    const prevIndex = this.state.activeIndex;
+    const activeIndex =
+      (this.state.activeIndex === (this.props.data.length - 1)) ? 0 : (this.state.activeIndex + 1);
+
+    this.setState({'direction': 1});
+    setTimeout(this._delayUpdateSlideIndex.bind(this, activeIndex, prevIndex), 0);
   }
 
   _prevSlide() {
@@ -81,24 +79,38 @@ export default class ImageSlider extends Component {
       return;
     }
 
-    const slideCount =
-      (this.state.current === 0) ? (this.props.data.length - 1) : (this.state.current - 1);
-    this.setState({ 'current': slideCount, 'direction': -1 });
+    const prevIndex = this.state.activeIndex;
+    const activeIndex =
+      (this.state.activeIndex === 0) ? (this.props.data.length - 1) : (this.state.activeIndex - 1);
+
+    this.setState({'direction': -1});
+    setTimeout(this._delayUpdateSlideIndex.bind(this, activeIndex, prevIndex), 0);
   }
 
-  _renderArrow(isLeft, className) {
-    if (!className) {
-      className = 'slider-arrow';
-    }
+  _delayUpdateSlideIndex(activeIndex, prevIndex) {
+    this.setState({
+      'activeIndex': activeIndex,
+      'prevIndex': prevIndex
+    });
+  }
 
-    const arrow = isLeft ? '<' : '>';
-    className += isLeft ? ' slider-arrow-left' : ' slider-arrow-right';
-
+  _renderArrows() {
     return (
-      <div
-        className={className}
-        onClick={isLeft ? this._prevSlide : this._nextSlide}>
-        <i className='slider-arrow-icon' aria-hidden="true">{arrow}</i>
+      <div className='slider-arrow-row'>
+        <div className='slider-arrow-left'>
+          <Arrow
+            isLeft={true}
+            onClick={this._prevSlide}
+            arrowClassName={this.props.arrowClassName}
+          />
+        </div>
+        <div className='slider-arrow-right'>
+          <Arrow
+            isLeft={false}
+            onClick={this._nextSlide}
+            arrowClassName={this.props.arrowClassName}
+          />
+        </div>
       </div>
     );
   }
@@ -109,5 +121,5 @@ ImageSlider.defaultProps = {
   controlClassName: '',
   backgroundClassName: 'slider-background',
   arrowClassName: 'slider-arrow',
-  transitionStyle: 'translate'
+  transitionStyle: TransitionStyle.blur
 }
