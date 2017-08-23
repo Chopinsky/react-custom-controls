@@ -15,13 +15,14 @@
   width: 50px;
   height: 50px;
   line-height: 50px;
+  border-radius: 5px;
   z-index: 1000;
 }
 
 .slider-arrow:hover {
   opacity: 0.75;
-  transform: scale(1.05);
-  transition: all ease-in .15s;
+  transform: scale(1.1);
+  transition: all ease-in .1s;
 }
 
 .slider-arrow-row {
