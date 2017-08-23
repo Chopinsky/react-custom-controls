@@ -1,13 +1,13 @@
 {
   "name": "react-custom-controls",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Collection of react based custom controls",
   "main": "src/index.js",
   "author": "Jacob Zuo <jacob.dzwo@gmail.com>",
   "license": "Apache-2.0",
   "scripts": {
     "test": "react-scripts test --env=jsdom",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 9079",
     "build-storybook": "build-storybook"
   },
   "keywords": [

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { default as SlideItems } from './slide-items';
-import './image-slider.css';
+import { default as SlideShowItems } from './slide-show-items';
+import './slide-show.css';
 
 const TransitionStyle = {
   'translate': 'translate',
@@ -16,14 +16,14 @@ const Arrow = (props) => {
   return (
     <div
       style={{'float': float}}
-      className={props.arrowClassName}
+      className={props.arrowClass}
       onClick={props.onClick}>
       <i className='slider-arrow-icon' aria-hidden="true">{arrow}</i>
     </div>
   );
 };
 
-export default class ImageSlider extends Component {
+export default class SlideShow extends Component {
   constructor(props) {
     super(props);
 
@@ -35,8 +35,9 @@ export default class ImageSlider extends Component {
 
     this._nextSlide = this._nextSlide.bind(this);
     this._prevSlide = this._prevSlide.bind(this);
+    this._set = this._set.bind(this);
 
-    this.Arrows = this._renderArrows();
+    this._renderArrows = this._renderArrows.bind(this);
   }
 
   render() {
@@ -44,18 +45,16 @@ export default class ImageSlider extends Component {
       return null;
     }
 
+    const { style, controlClass, arrowClass, ...other } = this.props;
     return (
       <div
-        className={this.props.controlClassName + ' slider-control'}
-        style={this.props.style}
+        className={controlClass + ' slider-control'}
+        style={style}
       >
-        {this.Arrows}
-        <SlideItems
-          data={this.props.data}
-          transitionStyle={this.props.transitionStyle}
-          activeIndex={this.state.activeIndex}
-          prevIndex={this.state.prevIndex}
-          direction={this.state.direction}
+        {this._renderArrows(arrowClass)}
+        <SlideShowItems
+          {...other}
+          {...this.state}
         />
       </div>
     );
@@ -70,8 +69,7 @@ export default class ImageSlider extends Component {
     const activeIndex =
       (this.state.activeIndex === (this.props.data.length - 1)) ? 0 : (this.state.activeIndex + 1);
 
-    this.setState({'direction': 1});
-    setTimeout(this._delayUpdateSlideIndex.bind(this, activeIndex, prevIndex), 0);
+    this._set(activeIndex, prevIndex, 1);
   }
 
   _prevSlide() {
@@ -83,8 +81,24 @@ export default class ImageSlider extends Component {
     const activeIndex =
       (this.state.activeIndex === 0) ? (this.props.data.length - 1) : (this.state.activeIndex - 1);
 
-    this.setState({'direction': -1});
-    setTimeout(this._delayUpdateSlideIndex.bind(this, activeIndex, prevIndex), 0);
+    this._set(activeIndex, prevIndex, -1);
+  }
+
+  _set(activeIndex, prevIndex, direction) {
+    if (this.props.transitionStyle === 'translate') {
+      // this is the workaround on translate transition style, since
+      // we need to update the 'stale' state of the class first when
+      // reversing directions first, and then update the slides, otherwise
+      // the previous slide will still 'leave' at the wrong direction.
+      this.setState({'direction': direction});
+      setTimeout(this._delayUpdateSlideIndex.bind(this, activeIndex, prevIndex), 0);
+    } else {
+      this.setState({
+        'activeIndex': activeIndex,
+        'prevIndex': prevIndex,
+        'direction': direction
+      });
+    }
   }
 
   _delayUpdateSlideIndex(activeIndex, prevIndex) {
@@ -94,21 +108,21 @@ export default class ImageSlider extends Component {
     });
   }
 
-  _renderArrows() {
+  _renderArrows(arrowClass) {
     return (
       <div className='slider-arrow-row'>
         <div className='slider-arrow-left'>
           <Arrow
             isLeft={true}
             onClick={this._prevSlide}
-            arrowClassName={this.props.arrowClassName}
+            arrowClass={arrowClass}
           />
         </div>
         <div className='slider-arrow-right'>
           <Arrow
             isLeft={false}
             onClick={this._nextSlide}
-            arrowClassName={this.props.arrowClassName}
+            arrowClass={arrowClass}
           />
         </div>
       </div>
@@ -116,10 +130,10 @@ export default class ImageSlider extends Component {
   }
 }
 
-ImageSlider.defaultProps = {
+SlideShow.defaultProps = {
   data: [],
-  controlClassName: '',
-  backgroundClassName: 'slider-background',
-  arrowClassName: 'slider-arrow',
-  transitionStyle: TransitionStyle.blur
+  controlClass: '',
+  arrowClass: 'slider-arrow',
+  titleSectionClass: 'div-text-sec',
+  transitionStyle: TransitionStyle.rotate
 }

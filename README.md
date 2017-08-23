@@ -1,5 +1,7 @@
 ## React Custom controls
 
+[![npm version]](https://www.npmjs.com/package/react-custom-controls)
+
 This project aims to create a collection of controls widely that are easy to use out of the box. All you need to know is your app's data structure and CSS styles, everything else will be taking care of.
 
 The controls are created in React components and can be embedded into React or React Native apps.

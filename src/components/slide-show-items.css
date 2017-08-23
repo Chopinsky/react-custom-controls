@@ -1,0 +1,66 @@
+.div-bg {
+  width: 100%;
+  height: 100%;
+  margin-top: -50px;
+  display: inline-block;
+  position: relative;
+}
+
+.div-slide {
+  position: relative;
+  display: inline-block;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.div-text-sec {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: -3%;
+  padding: 10px 0;
+  width: 100%;
+  height: 30%;
+  text-align: center;
+  color: #F8F8FF;
+  background: rgba(0, 0, 0, 0.4);
+  transition: all .2s ease-in-out;
+}
+
+.div-text-sec:hover {
+  transform: translateY(-10%);
+}
+
+.text-title-container {
+  position: relative;
+  height: 33%;
+  font-size: 30px;
+  text-overflow: ellipsis;
+}
+
+.text-title {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.text-details-container {
+  position: relative;
+  height: 50%;
+  font-size: 16px;
+  text-overflow: ellipsis;
+}
+
+.text-details {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  top: 10px;
+}
