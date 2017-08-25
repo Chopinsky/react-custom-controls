@@ -28,16 +28,24 @@ export default class SlideShow extends Component {
     super(props);
 
     this.state = {
-      'activeIndex': 0,
-      'prevIndex': '',
+      'activeIndex': props.activeIndex || 0,
+      'prevIndex': null,
       'direction': 1
     };
 
+    this._set = this._set.bind(this);
     this._nextSlide = this._nextSlide.bind(this);
     this._prevSlide = this._prevSlide.bind(this);
-    this._set = this._set.bind(this);
-
+    this._clickHandler = this._clickHandler.bind(this);
     this._renderArrows = this._renderArrows.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.activeIndex !== this.state.activeIndex) {
+      const direction = (nextProps.activeIndex < this.state.activeIndex) ? -1 : 1;
+      const prevIndex = this.state.activeIndex;
+      this._set(nextProps.activeIndex, prevIndex, direction);
+    }
   }
 
   render() {
@@ -50,6 +58,8 @@ export default class SlideShow extends Component {
       <div
         className={controlClass + ' slider-control'}
         style={style}
+        onClick={(e) => this._clickHandler(e, 'prev')}
+        onContextMenu={(e) => this._clickHandler(e, 'next')}
       >
         {this._renderArrows(arrowClass)}
         <SlideShowItems
@@ -60,7 +70,24 @@ export default class SlideShow extends Component {
     );
   }
 
-  _nextSlide() {
+  _clickHandler(event, direction) {
+    event.preventDefault();
+
+    if (direction === 'next') {
+      this._nextSlide(event);
+    } else {
+      this._prevSlide(event);
+    }
+
+    if (typeof this.props.onClick === 'function') {
+      this.props.onClick(event);
+    }
+
+    return false;
+  }
+
+  _nextSlide(event) {
+    event.stopPropagation();
     if (!this.props.data || !this.props.data.length) {
       return;
     }
@@ -72,7 +99,8 @@ export default class SlideShow extends Component {
     this._set(activeIndex, prevIndex, 1);
   }
 
-  _prevSlide() {
+  _prevSlide(event) {
+    event.stopPropagation();
     if (!this.props.data || !this.props.data.length) {
       return;
     }
@@ -132,6 +160,7 @@ export default class SlideShow extends Component {
 
 SlideShow.defaultProps = {
   data: [],
+  activeIndex: 0,
   controlClass: '',
   arrowClass: 'slider-arrow',
   titleSectionClass: 'div-text-sec',
