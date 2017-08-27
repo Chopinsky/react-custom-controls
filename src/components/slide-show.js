@@ -38,6 +38,12 @@ export default class SlideShow extends Component {
     this._prevSlide = this._prevSlide.bind(this);
     this._clickHandler = this._clickHandler.bind(this);
     this._renderArrows = this._renderArrows.bind(this);
+    this._autoRotation = this._autoRotation.bind(this);
+    this._onMouseHoverHandler = this._onMouseHoverHandler.bind(this);
+
+    if (props.autoRotation) {
+      this._autoRotation(true);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,6 +51,10 @@ export default class SlideShow extends Component {
       const direction = (nextProps.activeIndex < this.state.activeIndex) ? -1 : 1;
       const prevIndex = this.state.activeIndex;
       this._set(nextProps.activeIndex, prevIndex, direction);
+    }
+
+    if (nextProps.autoRotation !== this.props.autoRotation) {
+      this._autoRotation(nextProps.autoRotation);
     }
   }
 
@@ -60,6 +70,8 @@ export default class SlideShow extends Component {
         style={style}
         onClick={(e) => this._clickHandler(e, 'prev')}
         onContextMenu={(e) => this._clickHandler(e, 'next')}
+        onMouseEnter={(e) => this._onMouseHoverHandler(e, true)}
+        onMouseLeave={(e) => this._onMouseHoverHandler(e, false)}
       >
         {this._renderArrows(arrowClass)}
         <SlideShowItems
@@ -70,8 +82,28 @@ export default class SlideShow extends Component {
     );
   }
 
+  _onMouseHoverHandler(event, mouseHover) {
+    console.log(event);
+    console.log(mouseHover);
+    if (this.props.autoRotation) {
+      this._autoRotation(!mouseHover);
+    }
+  }
+
+  _autoRotation(start) {
+    if (start) {
+      this._timer = setInterval(() => {
+        this._nextSlide(null)
+      }, 3000);
+    } else {
+      clearInterval(this._timer);
+    }
+  }
+
   _clickHandler(event, direction) {
-    event.preventDefault();
+    if (!!event) {
+      event.stopPropagation();
+    }
 
     if (direction === 'next') {
       this._nextSlide(event);
@@ -87,7 +119,10 @@ export default class SlideShow extends Component {
   }
 
   _nextSlide(event) {
-    event.stopPropagation();
+    if (!!event) {
+      event.stopPropagation();
+    }
+
     if (!this.props.data || !this.props.data.length) {
       return;
     }
@@ -100,7 +135,10 @@ export default class SlideShow extends Component {
   }
 
   _prevSlide(event) {
-    event.stopPropagation();
+    if (!!event) {
+      event.stopPropagation();
+    }
+
     if (!this.props.data || !this.props.data.length) {
       return;
     }
