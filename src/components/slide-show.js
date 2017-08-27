@@ -199,6 +199,7 @@ export default class SlideShow extends Component {
 SlideShow.defaultProps = {
   data: [],
   activeIndex: 0,
+  autoRotation: false,
   controlClass: '',
   arrowClass: 'slider-arrow',
   titleSectionClass: 'div-text-sec',
