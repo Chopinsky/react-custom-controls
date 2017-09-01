@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "react-scripts test --env=jsdom",
-    "storybook": "start-storybook -p 9079",
+    "storybook": "start-storybook -p 9079 -c .storybook",
     "build-storybook": "build-storybook"
   },
   "keywords": [

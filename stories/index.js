@@ -4,10 +4,18 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
-import { Button, Welcome } from '@storybook/react/demo';
+import { Welcome } from '@storybook/react/demo';
+import { SelectionList } from '../src/index'
+
+const items = ["test item 1", "test item 2", "test item 3"].map((name) => {
+  return {
+    id: window.btoa(name),
+    name: name,
+    icon: ''
+  }
+})
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
-storiesOf('Button', module)
-  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
-  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
+storiesOf('Selection List', module)
+  .add('default', () => <SelectionList onItemClicked={action('clicked')} data={items} />)
