@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
 import { Welcome } from '@storybook/react/demo';
-import { SelectionList, ExpandableOptions } from '../src/index'
+import { SelectionList, FanOptions } from '../src/index'
 
 const listItems = ["test item 1", "test item 2", "test item 3"].map((name) => {
   return {
@@ -21,5 +21,5 @@ storiesOf('Welcome', module)
 storiesOf('Selection List', module)
   .add('default', () => <SelectionList onItemClicked={action('clicked')} data={listItems} />)
 
-storiesOf('Expandable Options', module)
-  .add('default', () => <ExpandableOptions />)
+storiesOf('Fan Options', module)
+  .add('default', () => <FanOptions />)
