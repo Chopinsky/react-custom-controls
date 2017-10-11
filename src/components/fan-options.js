@@ -15,7 +15,10 @@ export default class ExpandableOptions extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { "fanAngle": this.normalizeFanAngle(this.props.fanAngle) }
+    this.state = { 
+      "fanAngle": this.normalizeFanAngle(this.props.fanAngle),
+      "isOpen": false
+    }
 
     this.getDeltaPos = this.getDeltaPos.bind(this);
     this.getSeparationAngles = this.getSeparationAngles.bind(this);

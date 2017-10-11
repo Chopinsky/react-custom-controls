@@ -22,4 +22,8 @@ storiesOf('Selection List', module)
   .add('default', () => <SelectionList onItemClicked={action('clicked')} data={listItems} />)
 
 storiesOf('Fan Options', module)
-  .add('default', () => <FanOptions />)
+  .add('default', () => (
+    <div>
+      <FanOptions />
+    </div>
+  ))
