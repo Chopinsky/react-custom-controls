@@ -45,8 +45,8 @@ export default class SelectionList extends Component {
     };
 
     this._dragHandler = this._dragHandler.bind(this);
-    this._shuffleHandler = this._shuffleHandler.bind(this);
     this._dropHandler = this._dropHandler.bind(this);
+    this._shuffleHandler = this._shuffleHandler.bind(this);
   }
 
   componentDidMount() {
@@ -88,10 +88,12 @@ export default class SelectionList extends Component {
   }
 
   _dragHandler(event, index) {
+    event.stopPropagation();
     this.setState({ 'draggedItem': index });
   }
 
   _dropHandler(event, index) {
+    event.stopPropagation();
     this.setState({ 'draggedItem': null });
   }
 

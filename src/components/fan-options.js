@@ -6,11 +6,6 @@ import React from 'react';
 const defaultMainButtonDiam = 90;
 const defaultChildButtonDiam = 50;
 
-// helper functions
-const degToRad = (deg) => Math.PI * deg / 180;
-const degOffset = (index, total, fanAngle) => 90 + fanAngle * ((index / (total - 1)) - 0.5);
-const normalizeFanAngle = (fanAngle) => parseInt(fanAngle) <= 360 ? fanAngle : 360;
-
 export default class ExpandableOptions extends React.Component {
   constructor(props) {
     super(props);
@@ -29,13 +24,20 @@ export default class ExpandableOptions extends React.Component {
       this.setState({ "fanAngle": this.normalizeFanAngle(nextProps.fanAngle) });
     }
   }
-
-  getSeparationAngles = () => {
-    const childrenCount = this.props.children.length;
-    return childrenCount <= 1 ? 0 : (this.state.fanAngle / (childrenCount - 1))
+  
+  degToRad(deg) {
+    return Math.PI * deg / 180;
+  }
+ 
+  degOffset(index, total, fanAngle) {
+    return 90 + fanAngle * ((index / (total - 1)) - 0.5);
   }
 
-  getDeltaPos = (index) => {
+  normalizeFanAngle(fanAngle) {
+    return parseInt(fanAngle) <= 360 ? fanAngle : 360;
+  }
+
+  getDeltaPos(index) {
     if (index === null || index === undefined || index === NaN) {
       return {};
     }
@@ -46,6 +48,34 @@ export default class ExpandableOptions extends React.Component {
     return {
       "dx": -1 * this.props.radius * Math.cos(radOffset),
       "dy": this.props.radius * Math.sin(radOffset)
+    }
+  }
+
+  mainBtnStyle() { 
+    return {
+      "width": defaultMainButtonDiam,
+      "height": defaultMainButtonDiam,
+      "top": this.props.verticalPosition - (defaultMainButtonDiam / 2),
+      "left": this.props.horizontalPosition - (defaultMainButtonDiam / 2)
+    }
+  }
+
+  initChildBtnStyle() {
+    return {
+      "width": defaultChildButtonDiam,
+      "height": defaultChildButtonDiam,
+      "top": this.props.verticalPosition - (defaultChildButtonDiam / 2),
+      "left": this.props.horizontalPosition - (defaultChildButtonDiam / 2)
+    }
+  }
+
+  finalChildBtnStyle(index) {
+    let {dx, dy} = this.getDeltaPos(index);
+    return {
+      "width": defaultChildButtonDiam,
+      "height": defaultChildButtonDiam,
+      "top": this.props.verticalPosition + dx,
+      "left": this.props.horizontalPosition - dy
     }
   }
 
