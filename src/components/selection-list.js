@@ -44,25 +44,25 @@ export default class SelectionList extends Component {
       'data': props.data
     };
 
-    this._dragHandler = this._dragHandler.bind(this);
-    this._dropHandler = this._dropHandler.bind(this);
-    this._shuffleHandler = this._shuffleHandler.bind(this);
+    this.dragHandler = this.dragHandler.bind(this);
+    this.dropHandler = this.dropHandler.bind(this);
+    this.shuffleHandler = this.shuffleHandler.bind(this);
   }
 
   componentDidMount() {
     if (this.props.selectFirst && this.props.data.length > 0) {
-      this._clickHandler(this.props.data[0].id);
+      this.clickHandler(this.props.data[0].id);
     }
   }
 
-  _clickHandler(id) {
+  clickHandler(id) {
     this.setState({ focusedItem: id });
     if (!!this.props.onItemClicked && typeof this.props.onItemClicked === 'function') {
       this.props.onItemClicked(id);
     }
   }
 
-  _isActive(key) {
+  isActive(key) {
     if (key === this.state.focusedItem) {
       return this.props.selectionClassName + ' ' + this.props.itemClassName;
     }
@@ -70,7 +70,7 @@ export default class SelectionList extends Component {
     return 'list-default ' + this.props.itemClassName;
   }
 
-  _renderItem(text, icon) {
+  renderItem(text, icon) {
     if (!icon) {
       return <div>{text}</div>;
     } else {
@@ -87,17 +87,17 @@ export default class SelectionList extends Component {
     }
   }
 
-  _dragHandler(event, index) {
+  dragHandler(event, index) {
     event.stopPropagation();
     this.setState({ 'draggedItem': index });
   }
 
-  _dropHandler(event, index) {
+  dropHandler(event, index) {
     event.stopPropagation();
     this.setState({ 'draggedItem': null });
   }
 
-  _shuffleHandler(event, index) {
+  shuffleHandler(event, index) {
     if (this.state.data[index].id !== this.state.data[this.state.draggedItem].id) {
       const items = reinsert(this.state.data, this.state.draggedItem, index);
       this.setState({ 'data': items });
@@ -113,13 +113,13 @@ export default class SelectionList extends Component {
 
       return (
         <li key={index} id={item.id} ref={'item-' + index}
-            className={this._isActive(item.id)}
+            className={this.isActive(item.id)}
             draggable={true}
-            onDragStart={(e) => this._dragHandler(e, index)}
-            onDragEnter={(e) => this._shuffleHandler(e, index)}
-            onDrop={(e) => this._dropHandler(e, index)}
-            onClick={this._clickHandler.bind(this, item.id)}>
-          {this._renderItem(item.name.toString(), item.icon)}
+            onDragStart={(e) => this.dragHandler(e, index)}
+            onDragEnter={(e) => this.shuffleHandler(e, index)}
+            onDrop={(e) => this.dropHandler(e, index)}
+            onClick={this.clickHandler.bind(this, item.id)}>
+          {this.renderItem(item.name.toString(), item.icon)}
         </li>);
     });
 
