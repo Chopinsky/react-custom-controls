@@ -1,10 +1,13 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { Motion, StaggeredMotion, spring } from 'react-motion';
 
 // default props:
-const defaultMainButtonDiam = 90;
-const defaultChildButtonDiam = 50;
+const DEFAULT_MAIN_DIAM = 90;
+const DEFAULT_CHILD_DIAM = 50;
+const DEFAULT_SPRING_CONFIG = { stiffness: 400, damping: 28 };
 
 export default class ExpandableOptions extends React.Component {
   constructor(props) {
@@ -19,9 +22,26 @@ export default class ExpandableOptions extends React.Component {
     this.getSeparationAngles = this.getSeparationAngles.bind(this);
   }
 
+  componentDidMount() {
+    let childButtons = [];
+
+    Array(this.props.children.length).fill(0).forEach((_, index) => {
+      childButtons.push(this.renderChildButton(index));
+    });
+
+    this.setState({childButtons: childButtons.slice(0)});
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.fanAngle !== this.props.fanAngle) {
       this.setState({ "fanAngle": this.normalizeFanAngle(nextProps.fanAngle) });
+    }
+  }
+
+  getSprintConfig() {
+    return {
+      "stiffness": this.props.stiffness || DEFAULT_SPRING_CONFIG.stiffness,
+      "damping": this.props.damping || DEFAULT_SPRING_CONFIG.damping
     }
   }
   
@@ -37,7 +57,7 @@ export default class ExpandableOptions extends React.Component {
     return parseInt(fanAngle) <= 360 ? fanAngle : 360;
   }
 
-  getDeltaPos(index) {
+  calcDeltaPos(index) {
     if (index === null || index === undefined || index === NaN) {
       return {};
     }
@@ -45,37 +65,45 @@ export default class ExpandableOptions extends React.Component {
     const degOffset = this.degOffset(index, this.props.children.length, this.state.fanAngle);
     const radOffset = this.degToRad(degOffset);
 
-    return {
-      "dx": -1 * this.props.radius * Math.cos(radOffset),
-      "dy": this.props.radius * Math.sin(radOffset)
-    }
+    this.dx = -1 * this.props.radius * Math.cos(radOffset),
+    this.dy = this.props.radius * Math.sin(radOffset)
   }
 
   mainBtnStyle() { 
     return {
-      "width": defaultMainButtonDiam,
-      "height": defaultMainButtonDiam,
-      "top": this.props.verticalPosition - (defaultMainButtonDiam / 2),
-      "left": this.props.horizontalPosition - (defaultMainButtonDiam / 2)
+      "width": DEFAULT_MAIN_DIAM,
+      "height": DEFAULT_MAIN_DIAM,
+      "top": this.props.verticalPosition - (DEFAULT_MAIN_DIAM / 2),
+      "left": this.props.horizontalPosition - (DEFAULT_MAIN_DIAM / 2)
     }
   }
 
   initChildBtnStyle() {
     return {
-      "width": defaultChildButtonDiam,
-      "height": defaultChildButtonDiam,
-      "top": this.props.verticalPosition - (defaultChildButtonDiam / 2),
-      "left": this.props.horizontalPosition - (defaultChildButtonDiam / 2)
+      "width": DEFAULT_CHILD_DIAM,
+      "height": DEFAULT_CHILD_DIAM,
+      "top": this.props.verticalPosition - (DEFAULT_CHILD_DIAM / 2),
+      "left": this.props.horizontalPosition - (DEFAULT_CHILD_DIAM / 2)
+    }
+  }
+
+  transitionalChildBtnStyle(index) {
+    this.calcDeltaPos(index);
+    
+    return {
+      "width": DEFAULT_CHILD_DIAM,
+      "height": DEFAULT_CHILD_DIAM,
+      "top": this.props.verticalPosition - this.dy,
+      "left": this.props.horizontalPosition + this.dx
     }
   }
 
   finalChildBtnStyle(index) {
-    let {dx, dy} = this.getDeltaPos(index);
     return {
-      "width": defaultChildButtonDiam,
-      "height": defaultChildButtonDiam,
-      "top": this.props.verticalPosition + dx,
-      "left": this.props.horizontalPosition - dy
+      "width": DEFAULT_CHILD_DIAM,
+      "height": DEFAULT_CHILD_DIAM,
+      "top": spring(this.props.verticalPosition - this.dy, this.getSprintConfig()),
+      "left": spring(this.props.horizontalPosition + this.dx, this.getSprintConfig())
     }
   }
 
