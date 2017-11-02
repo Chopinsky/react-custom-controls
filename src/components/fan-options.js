@@ -13,19 +13,16 @@ export default class ExpandableOptions extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
+    this.state = {
       "fanAngle": this.normalizeFanAngle(this.props.fanAngle),
       "isOpen": false
     }
-
-    this.getDeltaPos = this.getDeltaPos.bind(this);
-    this.getSeparationAngles = this.getSeparationAngles.bind(this);
   }
 
   componentDidMount() {
     let childButtons = [];
 
-    Array(this.props.children.length).fill(0).forEach((_, index) => {
+    Array(this.props.childButtons.length).fill(0).forEach((_, index) => {
       childButtons.push(this.renderChildButton(index));
     });
 
@@ -38,17 +35,21 @@ export default class ExpandableOptions extends React.Component {
     }
   }
 
+  renderChildButton(index) {
+    return <p>{index}</p>
+  }
+
   getSprintConfig() {
     return {
       "stiffness": this.props.stiffness || DEFAULT_SPRING_CONFIG.stiffness,
       "damping": this.props.damping || DEFAULT_SPRING_CONFIG.damping
     }
   }
-  
+
   degToRad(deg) {
     return Math.PI * deg / 180;
   }
- 
+
   degOffset(index, total, fanAngle) {
     return 90 + fanAngle * ((index / (total - 1)) - 0.5);
   }
@@ -69,7 +70,7 @@ export default class ExpandableOptions extends React.Component {
     this.dy = this.props.radius * Math.sin(radOffset)
   }
 
-  mainBtnStyle() { 
+  mainBtnStyle() {
     return {
       "width": DEFAULT_MAIN_DIAM,
       "height": DEFAULT_MAIN_DIAM,
@@ -89,7 +90,7 @@ export default class ExpandableOptions extends React.Component {
 
   transitionalChildBtnStyle(index) {
     this.calcDeltaPos(index);
-    
+
     return {
       "width": DEFAULT_CHILD_DIAM,
       "height": DEFAULT_CHILD_DIAM,
@@ -107,9 +108,16 @@ export default class ExpandableOptions extends React.Component {
     }
   }
 
+  toggleMenu(event) {
+    event.stopPropagation();
+    let { isOpen } = this.state;
+    this.setState({ isOpen: !isOpen });
+  }
+
   render() {
     return (
       <div>
+        <p>{this.props.fanAngle}</p>
       </div>
     );
   }
