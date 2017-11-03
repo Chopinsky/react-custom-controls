@@ -35,10 +35,6 @@ export default class ExpandableOptions extends React.Component {
     }
   }
 
-  renderChildButton(index) {
-    return <p>{index}</p>
-  }
-
   getSprintConfig() {
     return {
       "stiffness": this.props.stiffness || DEFAULT_SPRING_CONFIG.stiffness,
@@ -79,7 +75,16 @@ export default class ExpandableOptions extends React.Component {
     }
   }
 
-  initChildBtnStyle() {
+  initChildBtnBeginStyles() {
+    return {
+      "width": DEFAULT_CHILD_DIAM,
+      "height": DEFAULT_CHILD_DIAM,
+      "top": spring(this.props.verticalPosition - (DEFAULT_CHILD_DIAM / 2), this.getSprintConfig())
+      "left": spring(this.props.horizontalPosition - (DEFAULT_CHILD_DIAM / 2), this.getSprintConfig())
+    }
+  }
+
+  initChildBtnStyles() {
     return {
       "width": DEFAULT_CHILD_DIAM,
       "height": DEFAULT_CHILD_DIAM,
@@ -88,7 +93,7 @@ export default class ExpandableOptions extends React.Component {
     }
   }
 
-  transitionalChildBtnStyle(index) {
+  finalChildBtnBeginStyles(index) {
     this.calcDeltaPos(index);
 
     return {
@@ -99,7 +104,7 @@ export default class ExpandableOptions extends React.Component {
     }
   }
 
-  finalChildBtnStyle(index) {
+  finalChildBtnStyles(index) {
     return {
       "width": DEFAULT_CHILD_DIAM,
       "height": DEFAULT_CHILD_DIAM,
@@ -112,6 +117,20 @@ export default class ExpandableOptions extends React.Component {
     event.stopPropagation();
     let { isOpen } = this.state;
     this.setState({ isOpen: !isOpen });
+  }
+
+  closeMenu() {
+    this.setState({ isOpen: false });
+  }
+
+  renderChildButton(index) {
+    const { isOpen } = this.state;
+    const targetBtnStyles = this.props.childButtons.map(index => {
+      return isOpen
+              ? this.finalChildBtnBeginStyles(index)
+              : this.initChildBtnBeginStyles(index)
+    });
+    return <p>{index}</p>
   }
 
   render() {
