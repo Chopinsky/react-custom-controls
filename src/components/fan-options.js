@@ -125,11 +125,23 @@ export default class ExpandableOptions extends React.Component {
 
   renderChildButton(index) {
     const { isOpen } = this.state;
-    const targetBtnStyles = this.props.childButtons.map(index => {
+    const targetBtnStylesArr = this.props.childButtons.map(index => {
       return isOpen
               ? this.finalChildBtnBeginStyles(index)
-              : this.initChildBtnBeginStyles(index)
+              : this.initChildBtnBeginStyles()
     });
+
+    // convert array to object
+    const targetBtnBeginStyles =
+      Object.keys(targetBtnStylesArr)
+            .map(key => targetBtnStylesArr[key]);
+
+    const targetBtnStyles = this.props.childButtons.map(index => {
+      return isOpen
+              ? this.finalChildBtnStyles(index)
+              : this.initChildBtnStyles()
+    });
+
     return <p>{index}</p>
   }
 
