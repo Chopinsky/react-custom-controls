@@ -79,7 +79,7 @@ export default class ExpandableOptions extends React.Component {
     return {
       "width": DEFAULT_CHILD_DIAM,
       "height": DEFAULT_CHILD_DIAM,
-      "top": spring(this.props.verticalPosition - (DEFAULT_CHILD_DIAM / 2), this.getSprintConfig())
+      "top": spring(this.props.verticalPosition - (DEFAULT_CHILD_DIAM / 2), this.getSprintConfig()),
       "left": spring(this.props.horizontalPosition - (DEFAULT_CHILD_DIAM / 2), this.getSprintConfig())
     }
   }
@@ -143,6 +143,16 @@ export default class ExpandableOptions extends React.Component {
     });
 
     return <p>{index}</p>
+  }
+
+  calcStylesForNextFrame(prevFrameStyle) {
+    prevFrameStyle = this.state.isOpen ? prevFrameStyle : prevFrameStyle.reverse();
+
+    let nextFrameStyle = prevFrameStyle.map((prevStyle, index) => {
+      if (index === 0) {
+        return
+      }
+    });
   }
 
   render() {

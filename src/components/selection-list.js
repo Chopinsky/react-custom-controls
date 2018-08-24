@@ -41,18 +41,48 @@ export default class SelectionList extends Component {
     this.state = {
       'focusedItem': null,
       'draggedItem': null,
+      'topDeltaY': 0,
+      'mouseY': 0,
+      'isPressed': false,
+      'originalPosOfLastPressed': 0,
       'data': props.data
     };
 
     this.dragHandler = this.dragHandler.bind(this);
     this.dropHandler = this.dropHandler.bind(this);
     this.shuffleHandler = this.shuffleHandler.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
   componentDidMount() {
     if (this.props.selectFirst && this.props.data.length > 0) {
       this.clickHandler(this.props.data[0].id);
     }
+
+    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('mouseup', this.handleMouseUp);
+  }
+
+  handleMouseMove(event) {
+    const { isPressed, topDeltaY, data, originalPosOfLastPressed } = this.state;
+    const { pageY } = event;
+
+    if (isPressed) {
+      const mouseY = pageY - topDeltaY;
+      const currentRow = getPosIndex(Math.round(mouseY/100), 0, this.props.data.length - 1);
+      let newData = data;
+
+      if (currentRow !== originalPosOfLastPressed) {
+        newData = reinsert(data, originalPosOfLastPressed, currentRow);
+      }
+
+      this.setState({ 'mouseY': mouseY, 'data': newData });
+    }
+  }
+
+  handleMouseUp(event) {
+    this.setState({ 'isPressed': false, 'topDeltaY': 0 });
   }
 
   clickHandler(id) {
